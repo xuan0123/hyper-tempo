@@ -1,5 +1,5 @@
 /node_modules
-/.vscode
-/yarn-error.log
+.vscode
+yarn-error.log
 .DS_Store
 /public
