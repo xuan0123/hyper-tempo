@@ -1,0 +1,89 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background-color: #454545;
+	color: #fff;
+	margin: 0;
+}
+
+button {
+	background-color: #fff;
+}
+
+select {
+	background-color: white;
+}
+
+.metronome {
+	overflow: hidden;
+	background-color: #333;
+	height: 90vh;
+	width: 80vw;
+	margin: 5vh 10vw;
+	color: #fff;
+	border-radius: 1em;
+	box-shadow: #222 2px 2px 4px;
+	text-align: center;
+}
+
+.container {
+	overflow: hidden;
+	height: 25%;
+}
+
+.bpm-container {
+	width: 100%;
+}
+
+.bpm-container-content {
+	width: 100%;
+	overflow: auto;
+}
+
+.bpm-container-button {
+	width: 25%;
+	float: left;
+}
+
+.bpm-container-text {
+	width: 50%;
+	float: left;
+}
+
+.bpm-container-text > h1 {
+	margin: 0 auto;
+}
+
+.bpm-container-tap {
+	clear: both;
+	width: 100%;
+}
+
+.time-sign-container {
+	clear: both;
+	width: 100%;
+}
+
+.select-count,
+.select-note {
+	width: 3em;
+	font-size: larger;
+}
+
+.select-subdivision {
+	font-size: larger;
+}
+
+@media only screen and (min-width: 768px) {
+	body {
+	}
+
+	.metronome {
+		width: 270px;
+		height: 70vh;
+		border-radius: 1em;
+		margin: 15vh auto;
+	}
+}

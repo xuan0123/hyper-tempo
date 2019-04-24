@@ -153,14 +153,18 @@ Tone.context.latencyHint = 'fastest';
 
 // init value of metronome
 Tone.Transport.bpm.value = 100;
-let bpmText = document.querySelector('.bpm');
+const bpmLimit = {
+	min: 10,
+	max: 400
+};
+const bpmText = document.querySelector('.bpm');
 bpmText.innerHTML = Tone.Transport.bpm.value;
 let timeSign = {
 	beats: 0,
 	note: 0
 };
-let subdivision = 20;
-let partOf = 0;
+let subdivision = 0;
+let lengthOfBeatPerSubdivNote = 0;
 let beatsPerLoop = 0;
 let counter = 1;
 let loop = {};
@@ -175,10 +179,10 @@ const metronome = () => {
 		if (Number.isInteger(beatsPerLoop)) {
 			boap.start();
 		} else {
-			if (partOf < 1) {
+			if (lengthOfBeatPerSubdivNote < 1) {
 				counter % 2 === 1 && boap.start();
 			} else {
-				counter % partOf === 1 && boap.start();
+				counter % lengthOfBeatPerSubdivNote === 1 && boap.start();
 			}
 		}
 	}
@@ -206,7 +210,7 @@ const setMetronome = () => {
 	timeSign.beats = parseInt(selectCount.value);
 	timeSign.note = parseInt(selectNote.value);
 	selectSubd.value === 'shuffle' ? (subdivision = 12) : (subdivision = parseInt(selectSubd.value));
-	partOf = timeSign.note / subdivision;
+	lengthOfBeatPerSubdivNote = timeSign.note / subdivision;
 	beatsPerLoop = timeSign.beats / timeSign.note * subdivision;
 
 	if (selectSubd.value === 'shuffle') {
@@ -248,10 +252,6 @@ document.querySelectorAll('select').forEach((elem) => {
 	});
 });
 
-const bpmLimit = {
-	min: 10,
-	max: 400
-};
 // bpm + 1
 document.querySelector('.plus-bpm').addEventListener('click', () => {
 	if (Math.round(Tone.Transport.bpm.value) < bpmLimit.max) {
