@@ -7,12 +7,33 @@
         <label class="bpm" name="bpm"></label>
         <button class="plus-bpm">+</button>
         <button class="tap-bpm">Tap</button>
-        <select>
+        Time Signature
+        <select class="select-count">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected="selected">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+        </select>
+        /
+        <select class="select-note">
             <option value="4">4</option>
             <option value="8">8</option>
-            <option value="16">16</option>
-            <option value="12">8th triplet</option>
-            <option value="shuffle">shuffle</option>
+        </select>
+
+        Subdivision
+        <select class="select-subdivision">
+            <option value="4">Quarter note</option>
+            <option value="8">8th note</option>
+            <option value="16">16th note</option>
+            <option value="6">Quarter note triplet</option>
+            <option value="12">8th note triplet</option>
+            <option value="24">16th note triplet</option>
+            <option value="shuffle">Shuffle</option>
+            <option value="20">8th Quintuplet</option>
+            <option value="40">16th Quintuplet</option>
         </select>
         <button class="play">CLICK</button>
         <script src="dist/bundle.js"></script>
