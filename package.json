@@ -19,14 +19,15 @@
 		"webpack-dev-server": "^3.3.1",
 		"webpack-merge": "^4.2.1"
 	},
-	"name": "metronome",
-	"version": "0.5.0",
+	"name": "hyper-tempo",
+	"version": "1.0.0",
 	"main": "index.js",
 	"scripts": {
 		"start": "webpack-dev-server --config webpack.dev.js --open",
 		"build": "webpack --config webpack.prod.js"
 	},
 	"license": "MIT",
-	"repository": "https://github.com/xuan0123/metronome",
-	"author": "Xuan"
+	"repository": "https://github.com/xuan0123/hyper-tempo",
+	"author": "Xuan Peng",
+	"description": "A Metronome made with Tone.js"
 }
