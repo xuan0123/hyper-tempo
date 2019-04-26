@@ -157,6 +157,7 @@ const bpmLimit = {
 	min: 10,
 	max: 400
 };
+const lightsContainer = document.querySelector('.lights-container');
 const bpmText = document.querySelector('.bpm');
 bpmText.innerHTML = Tone.Transport.bpm.value;
 let timeSign = {
@@ -170,55 +171,123 @@ let counter = 1;
 let loop = {};
 let beep = new Tone.Player('../public/beep.flac').toMaster();
 let boap = new Tone.Player('../public/boap.flac').toMaster();
+let activeLight = {};
+let preLight = 0;
+let lightCounter = 1;
+
+const lightShine = () => {
+	activeLight = document.getElementById(lightCounter);
+	preLight = activeLight;
+	activeLight.classList.add('light-active');
+	lightCounter === timeSign.beats ? (lightCounter = 1) : lightCounter++;
+};
 
 const metronome = () => {
+	if (preLight !== 0) {
+		preLight.classList.remove('light-active');
+	}
+
+	if (counter === 1) {
+		lightShine();
+	} else {
+		let subPerNote = subdivision / timeSign.note;
+		// if (1 - subPerNote % 1 < 0.0001) {
+		// 	subPerNote = Math.round(subPerNote);
+		// }
+		if (subPerNote !== 1) {
+			counter % subPerNote === 1 && lightShine();
+		} else {
+			lightShine();
+		}
+	}
+
 	//always beep at first point
 	if (counter === 1) {
 		beep.start();
 	} else {
-		if (Number.isInteger(beatsPerLoop)) {
+		if (equalNote) {
 			boap.start();
+		} else if (!isBPLightInt) {
+			counter % 2 === 1 && boap.start();
 		} else {
-			if (lengthOfBeatPerSubdivNote < 1) {
-				counter % 2 === 1 && boap.start();
+			if (lengthOfBeatPerSubdivNote !== 1) {
+				if (lengthOfBeatPerSubdivNote < 1) {
+					boap.start();
+				} else {
+					counter % 2 === 1 && boap.start();
+				}
 			} else {
 				counter % lengthOfBeatPerSubdivNote === 1 && boap.start();
 			}
 		}
 	}
 	console.log(counter);
-	if (Number.isInteger(beatsPerLoop)) {
-		counter === beatsPerLoop ? (counter = 1) : counter++;
-	} else {
-		counter === beatsPerLoop * 2 ? (counter = 1) : counter++;
-	}
+	counter === beatsPerLoop ? (counter = 1) : counter++;
 };
 
 const shuffleMetronome = () => {
 	if (counter === 1) {
 		beep.start();
 	} else {
-		counter % 3 !== 2 && boap.start();
+		if (isBPLInt) {
+			counter % 3 !== 2 && boap.start();
+		} else {
+			counter % 6 === 1 && boap.start();
+			counter % 6 === 5 && boap.start();
+		}
 	}
-	counter === beatsPerLoop ? (counter = 1) : counter++;
+	console.log(counter);
+	if (isBPLInt) {
+		counter === beatsPerLoop ? (counter = 1) : counter++;
+	} else {
+		counter === beatsPerLoop ? (counter = 1) : counter++;
+	}
+};
+
+const setLights = (beats) => {
+	let light = '';
+	let lights = '';
+	for (let i = 0; i < beats; i++) {
+		light = `<div class="light" id="${(i + 1).toString()}"></div>`;
+		lights += light;
+	}
+	lightsContainer.innerHTML = lights;
 };
 
 let selectNote = document.querySelector('.select-note');
 let selectCount = document.querySelector('.select-count');
 let selectSubd = document.querySelector('.select-subdivision');
+let isBPLInt = true;
+let isBPLightInt = false;
+let equalNote = false;
+let beatsPerLight = 0;
 const setMetronome = () => {
 	timeSign.beats = parseInt(selectCount.value);
 	timeSign.note = parseInt(selectNote.value);
 	selectSubd.value === 'shuffle' ? (subdivision = 12) : (subdivision = parseInt(selectSubd.value));
 	lengthOfBeatPerSubdivNote = timeSign.note / subdivision;
 	beatsPerLoop = timeSign.beats / timeSign.note * subdivision;
+	beatsPerLight = beatsPerLoop / timeSign.beats;
+	isBPLInt = Number.isInteger(beatsPerLoop);
+	isBPLightInt = Number.isInteger(beatsPerLight);
+	timeSign.note === subdivision ? (equalNote = true) : (equalNote = false);
+	setLights(timeSign.beats);
 
-	if (selectSubd.value === 'shuffle') {
-		loop = new Tone.Loop(shuffleMetronome, subdivision + 'n');
-	} else if (Number.isInteger(beatsPerLoop)) {
-		loop = new Tone.Loop(metronome, subdivision + 'n');
+	if (!isBPLInt || timeSign.note > subdivision || !isBPLightInt) {
+		subdivision *= 2;
+		beatsPerLoop *= 2;
+		//lengthOfBeatPerSubdivNote /= 2;
+		if (selectSubd.value === 'shuffle') {
+			loop = new Tone.Loop(shuffleMetronome, subdivision + 'n');
+		} else {
+			loop = new Tone.Loop(metronome, subdivision + 'n');
+		}
 	} else {
-		loop = new Tone.Loop(metronome, subdivision * 2 + 'n');
+		if (selectSubd.value === 'shuffle') {
+			loop = new Tone.Loop(shuffleMetronome, subdivision + 'n');
+		} else {
+			loop = new Tone.Loop(metronome, subdivision + 'n');
+		}
 	}
 };
 setMetronome();
@@ -230,6 +299,7 @@ const loopSwitch = async () => {
 	} else {
 		loop.stop();
 		counter = 1;
+		lightCounter = 1;
 	}
 };
 
@@ -268,17 +338,17 @@ document.querySelector('.minus-bpm').addEventListener('click', () => {
 	}
 });
 
-// tap bpm
-document.querySelector('.tap-bpm').addEventListener('click', () => {
-	let tapTime = 0.5;
-	Tone.Transport.seconds !== 0 && (tapTime = Tone.Transport.seconds);
-	let newTapBpm = 60 / tapTime;
-	if (newTapBpm > bpmLimit.min && newTapBpm < bpmLimit.max) {
-		Tone.Transport.bpm.value = newTapBpm;
-		bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
-	}
-	Tone.Transport.stop().start();
-});
+// // tap bpm
+// document.querySelector('.tap-bpm').addEventListener('click', () => {
+// 	let tapTime = 0.5;
+// 	Tone.Transport.seconds !== 0 && (tapTime = Tone.Transport.seconds);
+// 	let newTapBpm = 60 / tapTime;
+// 	if (newTapBpm > bpmLimit.min && newTapBpm < bpmLimit.max) {
+// 		Tone.Transport.bpm.value = newTapBpm;
+// 		bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
+// 	}
+// 	Tone.Transport.stop().start();
+// });
 
 
 /***/ })

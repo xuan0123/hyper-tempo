@@ -30,7 +30,29 @@ select {
 
 .container {
 	overflow: hidden;
-	height: 25%;
+	height: 20%;
+}
+
+.lights-container {
+	padding-top: 1em;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.light {
+	background-color: #a35;
+	float: left;
+	padding: 0 .7em;
+	height: 1.4em;
+	border-radius: 50%;
+	margin: 0 .9em;
+}
+
+.light-active {
+	background-color: #f25;
+	box-shadow: 0 0 3px 1px #f25;
 }
 
 .bpm-container {
@@ -38,17 +60,28 @@ select {
 }
 
 .bpm-container-content {
+	overflow: hidden;
+	padding: 0 25%;
 	width: 100%;
-	overflow: auto;
+	display: flex;
+}
+
+.bpm-container-content > div {
+	display: flex;
 }
 
 .bpm-container-button {
-	width: 25%;
+	width: 20%;
 	float: left;
 }
 
+.bpm-container-button > img {
+	align-self: center;
+	width: 100%;
+}
+
 .bpm-container-text {
-	width: 50%;
+	width: 70%;
 	float: left;
 }
 
@@ -68,22 +101,28 @@ select {
 
 .select-count,
 .select-note {
-	width: 3em;
-	font-size: larger;
+	width: 2.5em;
+	font-size: x-large;
 }
 
 .select-subdivision {
 	font-size: larger;
 }
 
-@media only screen and (min-width: 768px) {
-	body {
-	}
+.play-button-container {
+	display: flex;
+}
 
+.play {
+	align-self: center;
+	margin: 0 auto;
+}
+
+@media only screen and (min-width: 768px) {
 	.metronome {
-		width: 270px;
-		height: 70vh;
+		width: 300px;
+		height: 80vh;
 		border-radius: 1em;
-		margin: 15vh auto;
+		margin: 10vh auto;
 	}
 }
