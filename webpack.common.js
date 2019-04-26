@@ -1,22 +1,30 @@
 const path = require('path');
+
 module.exports = {
-	mode: 'development',
-	devtool: 'none',
 	entry: './src/index.js',
-	output: {
-		filename: 'bundle.js',
-		path: path.resolve(__dirname, 'dist')
-	},
 	module: {
 		rules: [
 			{
+				test: /\.html$/,
+				use: [ 'html-loader' ]
+			},
+			{
 				test: /\.flac$/,
-				exclude: /node_modules/,
 				use: {
 					loader: 'file-loader',
 					options: {
 						name: '[name].[ext]',
 						outputPath: 'audio'
+					}
+				}
+			},
+			{
+				test: /\.png$/,
+				use: {
+					loader: 'file-loader',
+					options: {
+						name: '[name].[hash].[ext]',
+						outputPath: 'images'
 					}
 				}
 			}
