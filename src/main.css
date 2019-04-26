@@ -1,11 +1,17 @@
 * {
 	box-sizing: border-box;
+	overflow: hidden;
 }
 
 body {
 	background-color: #454545;
 	color: #fff;
 	margin: 0;
+}
+
+h1,
+h2 {
+	font-family: sans-serif;
 }
 
 button {
@@ -17,11 +23,10 @@ select {
 }
 
 .metronome {
-	overflow: hidden;
 	background-color: #333;
-	height: 90vh;
+	height: 80vh;
 	width: 80vw;
-	margin: 5vh 10vw;
+	margin: 2vh 10vw;
 	color: #fff;
 	border-radius: 1em;
 	box-shadow: #222 2px 2px 4px;
@@ -29,11 +34,11 @@ select {
 }
 
 .container {
-	overflow: hidden;
 	height: 20%;
 }
 
 .lights-container {
+	height: 23%;
 	padding-top: 1em;
 	display: flex;
 	flex-wrap: wrap;
@@ -42,7 +47,7 @@ select {
 }
 
 .light {
-	background-color: #a35;
+	background-color: #634;
 	float: left;
 	padding: 0 .7em;
 	height: 1.4em;
@@ -51,17 +56,17 @@ select {
 }
 
 .light-active {
-	background-color: #f25;
-	box-shadow: 0 0 3px 1px #f25;
+	background-color: #f37;
+	box-shadow: 0 0 4px 2px #f37;
 }
 
 .bpm-container {
 	width: 100%;
 	padding-top: 5%;
+	height: 17%;
 }
 
 .bpm-container-content {
-	overflow: hidden;
 	padding: 0 25%;
 	width: 100%;
 	display: flex;
@@ -119,12 +124,12 @@ select {
 
 .select-count,
 .select-note {
-	width: 2.5em;
-	font-size: x-large;
+	width: 15vw;
+	font-size: medium;
 }
 
 .select-subdivision {
-	font-size: larger;
+	font-size: medium;
 }
 
 .play-button-container {
@@ -148,5 +153,15 @@ select {
 		height: 80vh;
 		border-radius: 1em;
 		margin: 10vh auto;
+	}
+
+	.select-count,
+	.select-note {
+		width: 2.5em;
+		font-size: larger;
+	}
+
+	.select-subdivision {
+		font-size: larger;
 	}
 }
