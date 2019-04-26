@@ -57,6 +57,7 @@ select {
 
 .bpm-container {
 	width: 100%;
+	padding-top: 5%;
 }
 
 .bpm-container-content {
@@ -91,7 +92,7 @@ select {
 }
 
 .range-container {
-	margin-top: 10%;
+	margin-top: 5%;
 }
 
 .slider {

@@ -2,8 +2,8 @@ const Tone = require('tone');
 import './main.css';
 import beepUrl from '../public/beep.flac';
 import boapUrl from '../public/boap.flac';
-console.log(beepUrl);
-console.log(boapUrl);
+import pauseButtonImg from '../public/pause-button-img.png';
+import playButtonImg from '../public/play-button-img.png';
 
 Tone.Transport.start(0);
 // amount of time events
@@ -83,14 +83,29 @@ const metronome = () => {
 };
 
 const shuffleMetronome = () => {
+	if (preLight !== 0) {
+		preLight.classList.remove('light-active');
+	}
+
+	if (counter === 1) {
+		lightShine();
+	} else {
+		let subPerNote = subdivision / timeSign.note;
+		if (subPerNote !== 1) {
+			counter % subPerNote === 1 && lightShine();
+		} else {
+			lightShine();
+		}
+	}
+
 	if (counter === 1) {
 		beep.start();
 	} else {
-		if (isBPLInt) {
-			counter % 3 !== 2 && boap.start();
-		} else {
+		if (!isBPLInt || !isBPLightInt) {
 			counter % 6 === 1 && boap.start();
 			counter % 6 === 5 && boap.start();
+		} else {
+			counter % 3 !== 2 && boap.start();
 		}
 	}
 	console.log(counter);
@@ -148,12 +163,16 @@ const setMetronome = () => {
 };
 setMetronome();
 
+const switchButton = document.querySelector('.play');
+
 const loopSwitch = async () => {
 	Tone.context.state !== 'running' && (await Tone.context.resume());
 	if (loop.state === 'stopped') {
 		loop.start();
+		switchButton.setAttribute('src', pauseButtonImg);
 	} else {
 		loop.stop();
+		switchButton.setAttribute('src', playButtonImg);
 		if (preLight !== 0) {
 			preLight.classList.remove('light-active');
 		}
