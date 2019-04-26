@@ -1,4 +1,5 @@
 const Tone = require('tone');
+import './main.css';
 import beepUrl from '../public/beep.flac';
 import boapUrl from '../public/boap.flac';
 console.log(beepUrl);
@@ -24,12 +25,12 @@ let timeSign = {
 	note: 0
 };
 let subdivision = 0;
-let lengthOfBeatPerSubdivNote = 0;
+let notePerSubdiv = 0;
 let beatsPerLoop = 0;
 let counter = 1;
 let loop = {};
-let beep = new Tone.Player('../public/beep.flac').toMaster();
-let boap = new Tone.Player('../public/boap.flac').toMaster();
+let beep = new Tone.Player(beepUrl).toMaster();
+let boap = new Tone.Player(boapUrl).toMaster();
 let activeLight = {};
 let preLight = 0;
 let lightCounter = 1;
@@ -50,9 +51,6 @@ const metronome = () => {
 		lightShine();
 	} else {
 		let subPerNote = subdivision / timeSign.note;
-		// if (1 - subPerNote % 1 < 0.0001) {
-		// 	subPerNote = Math.round(subPerNote);
-		// }
 		if (subPerNote !== 1) {
 			counter % subPerNote === 1 && lightShine();
 		} else {
@@ -69,14 +67,14 @@ const metronome = () => {
 		} else if (!isBPLightInt) {
 			counter % 2 === 1 && boap.start();
 		} else {
-			if (lengthOfBeatPerSubdivNote !== 1) {
-				if (lengthOfBeatPerSubdivNote < 1) {
+			if (notePerSubdiv !== 1) {
+				if (notePerSubdiv < 1) {
 					boap.start();
 				} else {
 					counter % 2 === 1 && boap.start();
 				}
 			} else {
-				counter % lengthOfBeatPerSubdivNote === 1 && boap.start();
+				counter % notePerSubdiv === 1 && boap.start();
 			}
 		}
 	}
@@ -116,7 +114,7 @@ const setLights = (beats) => {
 let selectNote = document.querySelector('.select-note');
 let selectCount = document.querySelector('.select-count');
 let selectSubd = document.querySelector('.select-subdivision');
-let isBPLInt = true;
+let isBPLInt = false;
 let isBPLightInt = false;
 let equalNote = false;
 let beatsPerLight = 0;
@@ -124,7 +122,7 @@ const setMetronome = () => {
 	timeSign.beats = parseInt(selectCount.value);
 	timeSign.note = parseInt(selectNote.value);
 	selectSubd.value === 'shuffle' ? (subdivision = 12) : (subdivision = parseInt(selectSubd.value));
-	lengthOfBeatPerSubdivNote = timeSign.note / subdivision;
+	notePerSubdiv = timeSign.note / subdivision;
 	beatsPerLoop = timeSign.beats / timeSign.note * subdivision;
 	beatsPerLight = beatsPerLoop / timeSign.beats;
 	isBPLInt = Number.isInteger(beatsPerLoop);
@@ -135,7 +133,6 @@ const setMetronome = () => {
 	if (!isBPLInt || timeSign.note > subdivision || !isBPLightInt) {
 		subdivision *= 2;
 		beatsPerLoop *= 2;
-		//lengthOfBeatPerSubdivNote /= 2;
 		if (selectSubd.value === 'shuffle') {
 			loop = new Tone.Loop(shuffleMetronome, subdivision + 'n');
 		} else {
@@ -157,6 +154,9 @@ const loopSwitch = async () => {
 		loop.start();
 	} else {
 		loop.stop();
+		if (preLight !== 0) {
+			preLight.classList.remove('light-active');
+		}
 		counter = 1;
 		lightCounter = 1;
 	}
@@ -181,10 +181,17 @@ document.querySelectorAll('select').forEach((elem) => {
 	});
 });
 
+const bpmSlider = document.querySelector('.slider');
+bpmSlider.oninput = () => {
+	Tone.Transport.bpm.value = bpmSlider.value;
+	bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
+};
+
 // bpm + 1
 document.querySelector('.plus-bpm').addEventListener('click', () => {
 	if (Math.round(Tone.Transport.bpm.value) < bpmLimit.max) {
 		Tone.Transport.bpm.value++;
+		bpmSlider.value = Math.round(Tone.Transport.bpm.value);
 		bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
 	}
 });
@@ -193,18 +200,7 @@ document.querySelector('.plus-bpm').addEventListener('click', () => {
 document.querySelector('.minus-bpm').addEventListener('click', () => {
 	if (Math.round(Tone.Transport.bpm.value) > bpmLimit.min) {
 		Tone.Transport.bpm.value--;
+		bpmSlider.value = Math.round(Tone.Transport.bpm.value);
 		bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
 	}
 });
-
-// // tap bpm
-// document.querySelector('.tap-bpm').addEventListener('click', () => {
-// 	let tapTime = 0.5;
-// 	Tone.Transport.seconds !== 0 && (tapTime = Tone.Transport.seconds);
-// 	let newTapBpm = 60 / tapTime;
-// 	if (newTapBpm > bpmLimit.min && newTapBpm < bpmLimit.max) {
-// 		Tone.Transport.bpm.value = newTapBpm;
-// 		bpmText.innerHTML = Math.round(Tone.Transport.bpm.value);
-// 	}
-// 	Tone.Transport.stop().start();
-// });

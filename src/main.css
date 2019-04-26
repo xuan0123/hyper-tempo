@@ -78,6 +78,7 @@ select {
 .bpm-container-button > img {
 	align-self: center;
 	width: 100%;
+	cursor: pointer;
 }
 
 .bpm-container-text {
@@ -87,6 +88,22 @@ select {
 
 .bpm-container-text > h1 {
 	margin: 0 auto;
+}
+
+.range-container {
+	margin-top: 10%;
+}
+
+.slider {
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+	width: 60%;
+}
+
+.slider:hover {
+	opacity: 1;
 }
 
 .bpm-container-tap {
@@ -113,9 +130,15 @@ select {
 	display: flex;
 }
 
-.play {
+.play-button-container > div {
 	align-self: center;
 	margin: 0 auto;
+	width: 16%;
+}
+
+.play {
+	width: 100%;
+	cursor: pointer;
 }
 
 @media only screen and (min-width: 768px) {

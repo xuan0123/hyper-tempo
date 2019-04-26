@@ -6,16 +6,22 @@
 		"@babel/core": "^7.4.3",
 		"@babel/preset-env": "^7.4.3",
 		"babel-loader": "^8.0.5",
+		"css-loader": "^2.1.1",
 		"file-loader": "^3.0.1",
+		"html-loader": "^0.5.5",
+		"html-webpack-plugin": "^3.2.0",
+		"style-loader": "^0.23.1",
 		"webpack": "^4.30.0",
 		"webpack-cli": "^3.3.0",
-		"webpack-dev-server": "^3.3.1"
+		"webpack-dev-server": "^3.3.1",
+		"webpack-merge": "^4.2.1"
 	},
 	"name": "metronome",
 	"version": "0.5.0",
 	"main": "index.js",
 	"scripts": {
-		"start": "webpack --watch --config webpack.config.js --open"
+		"start": "webpack-dev-server --config webpack.dev.js --open",
+		"build": "webpack --config webpack.prod.js"
 	},
 	"license": "MIT",
 	"repository": "https://github.com/xuan0123/metronome",

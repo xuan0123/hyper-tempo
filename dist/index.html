@@ -2,7 +2,6 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="./src/main.css">
     </head>
     <body>
         <div class="metronome">
@@ -13,12 +12,14 @@
                 <div></div>
             </div>
             <div class="bpm-container container">
-                <h2>BPM</h2>
                 <div class="bpm-container-content">
-                    <div class="bpm-container-button"><img src="public/minus-img.png" class="minus-bpm"></div>
+                    <div class="bpm-container-button"><img src="images/minus-img.086e7593c7d54806a71c02ddd18bd876.png" class="minus-bpm"></div>
                     <div class="bpm-container-text"><h1 class="bpm" name="bpm">100</h1></div>
-                    <div class="bpm-container-button"><img src="public/plus-img.png" class="plus-bpm"></div>
+                    <div class="bpm-container-button"><img src="images/plus-img.329b7b98f05772592de17af691ad9ced.png" class="plus-bpm"></div>
                 </div> 
+                <div class="range-container">
+                    <input type="range" min="10" max="400" value="100" class="slider">
+                </div>
                 <!-- <div class="bpm-container-tap"><button class="tap-bpm">Tap</button></div> -->
             </div>
             <div class="time-sign-container container">
@@ -62,9 +63,10 @@
                 </select>
             </div>
             <div class="play-button-container container">
-                <button class="play">CLICK</button>
+                <div>
+                    <img class="play" src="images/play-button-img.064ecac93702601a7eb35b309cebb0c6.png">
+                </div>
             </div>
         </div>
-        <script src="dist/bundle.js"></script>
-    </body>
+    <script type="text/javascript" src="bundle.82f572cd90959bc606de.js"></script></body>
 </html>
