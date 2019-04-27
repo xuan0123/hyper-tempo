@@ -1,2 +1,1 @@
-# Hyper Tempo
-A metronome made with [Tone.js](https://github.com/Tonejs/Tone.js)
+![Hyper-tempo](https://raw.githubusercontent.com/xuan0123/hyper-tempo/master/hyper-tempo.png)
