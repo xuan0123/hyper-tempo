@@ -78,7 +78,7 @@ const metronome = () => {
 			}
 		}
 	}
-	console.log(counter);
+	//console.log(counter);
 	counter === beatsPerLoop ? (counter = 1) : counter++;
 };
 
@@ -108,7 +108,7 @@ const shuffleMetronome = () => {
 			counter % 3 !== 2 && boap.start();
 		}
 	}
-	console.log(counter);
+	//console.log(counter);
 	if (isBPLInt) {
 		counter === beatsPerLoop ? (counter = 1) : counter++;
 	} else {
