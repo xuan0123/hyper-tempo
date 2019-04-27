@@ -19,7 +19,7 @@ module.exports = {
 				}
 			},
 			{
-				test: /\.png$/,
+				test: /\.png$|\.ico$/,
 				use: {
 					loader: 'file-loader',
 					options: {
