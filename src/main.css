@@ -149,10 +149,10 @@ select {
 
 @media only screen and (min-width: 768px) {
 	.metronome {
-		width: 300px;
-		height: 80vh;
+		width: 330px;
+		height: 90vh;
 		border-radius: 1em;
-		margin: 10vh auto;
+		margin: 5vh auto;
 	}
 
 	.select-count,
