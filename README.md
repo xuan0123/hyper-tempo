@@ -1,4 +1,4 @@
-![Hyper-tempo](https://raw.githubusercontent.com/xuan0123/hyper-tempo/master/hyper-tempo.png)
+![Hyper-tempo](https://raw.githubusercontent.com/xuan0123/hyper-tempo/master/hyper-tempo.png =300x)
 
 ## Youtube demo
 
