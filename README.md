@@ -4,9 +4,9 @@
 <img src='https://raw.githubusercontent.com/xuan0123/hyper-tempo/master/hyper-tempo.png'>
 </p>
 
-## Site
+## Link
 
-http://hyper-tempo.com/
+[Hyper Tempo](http://hyper-tempo.com/)
 
 ## Demo
 
