@@ -14,55 +14,59 @@ Tone.context.latencyHint = 'fastest';
 // init value of metronome
 Tone.Transport.bpm.value = 100;
 const bpmLimit = {
-	min: 10,
-	max: 400
+	min : 10,
+	max : 400
 };
 const lightsContainer = document.querySelector('.lights-container');
 const bpmText = document.querySelector('.bpm');
 bpmText.innerHTML = Tone.Transport.bpm.value;
 let timeSign = {
-	beats: 0,
-	note: 0
+	beats : 0,
+	note  : 0
 };
 let subdivision = 0;
 let notePerSubdiv = 0;
 let beatsPerLoop = 0;
 let counter = 1;
-let loop = {};
+let loop = null;
 let beep = new Tone.Player(beepUrl).toMaster();
 let boap = new Tone.Player(boapUrl).toMaster();
-let activeLight = {};
-let preLight = 0;
+let activeLight = null;
+let preLight = null;
 let lightCounter = 1;
+let selectSubd = document.querySelector('.select-subdivision');
+let isBPLInt = false;
+let isBPLightInt = false;
+let isNoteEqualToSubdiv = false;
+let beatsPerLight = 0;
+let subdivPerNote = 0;
 
-const lightShine = () => {
+function lightActivate() {
 	activeLight = document.getElementById(lightCounter);
 	preLight = activeLight;
 	activeLight.classList.add('light-active');
 	lightCounter === timeSign.beats ? (lightCounter = 1) : lightCounter++;
-};
+}
 
-const metronome = () => {
-	if (preLight !== 0) {
+function metronome() {
+	//lights section
+	//remove previous light
+	if (preLight !== null) {
 		preLight.classList.remove('light-active');
 	}
 
-	if (counter === 1) {
-		lightShine();
+	if (subdivPerNote === 1) {
+		lightActivate();
 	} else {
-		let subPerNote = subdivision / timeSign.note;
-		if (subPerNote !== 1) {
-			counter % subPerNote === 1 && lightShine();
-		} else {
-			lightShine();
-		}
+		counter % subdivPerNote === 1 && lightActivate();
 	}
 
-	//always beep at first point
+	// beep section
+	// always beep at first point
 	if (counter === 1) {
 		beep.start();
 	} else {
-		if (equalNote) {
+		if (isNoteEqualToSubdiv) {
 			boap.start();
 		} else if (!isBPLightInt) {
 			counter % 2 === 1 && boap.start();
@@ -78,23 +82,23 @@ const metronome = () => {
 			}
 		}
 	}
-	//console.log(counter);
-	counter === beatsPerLoop ? (counter = 1) : counter++;
-};
 
-const shuffleMetronome = () => {
-	if (preLight !== 0) {
+	counter === beatsPerLoop ? (counter = 1) : counter++;
+}
+
+function shuffleMetronome() {
+	if (preLight !== null) {
 		preLight.classList.remove('light-active');
 	}
 
 	if (counter === 1) {
-		lightShine();
+		lightActivate();
 	} else {
-		let subPerNote = subdivision / timeSign.note;
-		if (subPerNote !== 1) {
-			counter % subPerNote === 1 && lightShine();
+		let subdivPerNote = subdivision / timeSign.note;
+		if (subdivPerNote !== 1) {
+			counter % subdivPerNote === 1 && lightActivate();
 		} else {
-			lightShine();
+			lightActivate();
 		}
 	}
 
@@ -108,46 +112,41 @@ const shuffleMetronome = () => {
 			counter % 3 !== 2 && boap.start();
 		}
 	}
-	//console.log(counter);
-	if (isBPLInt) {
-		counter === beatsPerLoop ? (counter = 1) : counter++;
-	} else {
-		counter === beatsPerLoop ? (counter = 1) : counter++;
-	}
-};
 
-const setLights = (beats) => {
+	counter === beatsPerLoop ? (counter = 1) : counter++;
+}
+
+function setLights() {
 	let light = '';
 	let lights = '';
-	for (let i = 0; i < beats; i++) {
+	for (let i = 0; i < timeSign.beats; i++) {
 		light = `<div class="light" id="${(i + 1).toString()}"></div>`;
 		lights += light;
 	}
 	lightsContainer.innerHTML = lights;
-};
+}
 
-let selectNote = document.querySelector('.select-note');
-let selectCount = document.querySelector('.select-count');
-let selectSubd = document.querySelector('.select-subdivision');
-let isBPLInt = false;
-let isBPLightInt = false;
-let equalNote = false;
-let beatsPerLight = 0;
-const setMetronome = () => {
-	timeSign.beats = parseInt(selectCount.value);
-	timeSign.note = parseInt(selectNote.value);
-	selectSubd.value === 'shuffle' ? (subdivision = 12) : (subdivision = parseInt(selectSubd.value));
+function setMetronomeParam() {
+	timeSign.beats = parseInt(document.querySelector('.select-count').value);
+	timeSign.note = parseInt(document.querySelector('.select-note').value);
+	selectSubd.value === 'shuffle'
+		? (subdivision = 12)
+		: (subdivision = parseInt(selectSubd.value));
 	notePerSubdiv = timeSign.note / subdivision;
 	beatsPerLoop = timeSign.beats / timeSign.note * subdivision;
 	beatsPerLight = beatsPerLoop / timeSign.beats;
+	subdivPerNote = subdivision / timeSign.note;
 	isBPLInt = Number.isInteger(beatsPerLoop);
 	isBPLightInt = Number.isInteger(beatsPerLight);
-	timeSign.note === subdivision ? (equalNote = true) : (equalNote = false);
-	setLights(timeSign.beats);
+	timeSign.note === subdivision
+		? (isNoteEqualToSubdiv = true)
+		: (isNoteEqualToSubdiv = false);
+	setLights();
 
 	if (!isBPLInt || timeSign.note > subdivision || !isBPLightInt) {
 		subdivision *= 2;
 		beatsPerLoop *= 2;
+		subdivPerNote *= 2;
 		if (selectSubd.value === 'shuffle') {
 			loop = new Tone.Loop(shuffleMetronome, subdivision + 'n');
 		} else {
@@ -160,42 +159,40 @@ const setMetronome = () => {
 			loop = new Tone.Loop(metronome, subdivision + 'n');
 		}
 	}
-};
-setMetronome();
+}
+setMetronomeParam();
 
-const switchButton = document.querySelector('.play');
-
-const loopSwitch = async () => {
+async function loopToggle() {
 	Tone.context.state !== 'running' && (await Tone.context.resume());
 	if (loop.state === 'stopped') {
 		loop.start();
-		switchButton.setAttribute('src', pauseButtonImg);
+		toggleButton.setAttribute('src', pauseButtonImg);
 	} else {
 		loop.stop();
-		switchButton.setAttribute('src', playButtonImg);
-		if (preLight !== 0) {
+		toggleButton.setAttribute('src', playButtonImg);
+		if (preLight !== null) {
 			preLight.classList.remove('light-active');
 		}
 		counter = 1;
 		lightCounter = 1;
 	}
-};
+}
 
-// Loop switch (start / stop)
-document.querySelector('.play').addEventListener('click', async () => {
-	loopSwitch();
+const toggleButton = document.querySelector('.loop-toggle');
+toggleButton.addEventListener('click', () => {
+	loopToggle();
 });
 
 // change selected option when loop is running,
 // stop the loop, change the loop, then restart the loop
-document.querySelectorAll('select').forEach((elem) => {
-	elem.addEventListener('change', () => {
+document.querySelectorAll('select').forEach((el) => {
+	el.addEventListener('change', () => {
 		if (loop.state === 'started') {
-			loopSwitch();
-			setMetronome();
-			loopSwitch();
+			loopToggle();
+			setMetronomeParam();
+			loopToggle();
 		} else if (loop.state === 'stopped') {
-			setMetronome();
+			setMetronomeParam();
 		}
 	});
 });

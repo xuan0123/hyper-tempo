@@ -3,10 +3,15 @@
 	overflow: hidden;
 }
 
+html {
+	height: 100%;
+}
+
 body {
 	background-color: #454545;
 	color: #fff;
 	margin: 0;
+	height: 100%;
 }
 
 h1,
@@ -24,9 +29,9 @@ select {
 
 .metronome {
 	background-color: #333;
-	height: 80vh;
+	height: 95%;
 	width: 80vw;
-	margin: 2vh 10vw;
+	margin: 2.5vh 10vw;
 	color: #fff;
 	border-radius: 1em;
 	box-shadow: #222 2px 2px 4px;
@@ -48,11 +53,9 @@ select {
 
 .light {
 	background-color: #634;
-	float: left;
-	padding: 0 .7em;
-	height: 1.4em;
+	padding: .7em;
 	border-radius: 50%;
-	margin: 0 .9em;
+	margin: 0 .8em;
 }
 
 .light-active {
@@ -77,8 +80,8 @@ select {
 }
 
 .bpm-container-button {
+	touch-action: manipulation;
 	width: 20%;
-	float: left;
 }
 
 .bpm-container-button > img {
@@ -89,7 +92,6 @@ select {
 
 .bpm-container-text {
 	width: 70%;
-	float: left;
 }
 
 .bpm-container-text > h1 {
@@ -112,13 +114,7 @@ select {
 	opacity: 1;
 }
 
-.bpm-container-tap {
-	clear: both;
-	width: 100%;
-}
-
 .time-sign-container {
-	clear: both;
 	width: 100%;
 }
 
@@ -142,7 +138,7 @@ select {
 	width: 16%;
 }
 
-.play {
+.loop-toggle {
 	width: 100%;
 	cursor: pointer;
 }
