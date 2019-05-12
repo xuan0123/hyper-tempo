@@ -8,32 +8,35 @@ const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = merge(common, {
-	mode: 'production',
-	output: {
-		filename: 'bundle.[contentHash].js',
-		path: path.resolve(__dirname, 'dist')
+	mode         : 'production',
+	output       : {
+		filename : 'bundle.[contentHash].js',
+		path     : path.resolve(__dirname, 'dist')
 	},
-	optimization: {
-		minimizer: [
+	optimization : {
+		minimizer : [
 			new OptimizeCssAssetsPlugin(),
 			new TerserPlugin(),
 			new HtmlWebpackPlugin({
-				favicon: 'public/favicon.ico',
-				template: './src/template.html',
-				minify: {
-					removeAttributeQuotes: true,
-					collapseWhitespace: true,
-					removeComments: true
+				favicon  : 'public/favicon.ico',
+				template : './src/template.html',
+				minify   : {
+					removeAttributeQuotes : true,
+					collapseWhitespace    : true,
+					removeComments        : true
 				}
 			})
 		]
 	},
-	plugins: [ new MiniCssExtractPlugin({ filename: '[name].[contentHash].css' }), new CleanWebpackPlugin() ],
-	module: {
-		rules: [
+	plugins      : [
+		new MiniCssExtractPlugin({ filename: '[name].[contentHash].css' }),
+		new CleanWebpackPlugin()
+	],
+	module       : {
+		rules : [
 			{
-				test: /\.css$/,
-				use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+				test : /\.css$/,
+				use  : [ MiniCssExtractPlugin.loader, 'css-loader' ]
 			}
 		]
 	}
